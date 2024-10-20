@@ -204,9 +204,10 @@ def humain_resolution(grid):
     while (not is_all_cell_complete(grid_play)) and (count<100):
         count+=1
 
+        # si le nombre n'a pas d'autre possibilité de placement alors je le met
         for test_number in range(1,10):
 
-            # line finding (vérifie si le nombre test_number à une seule possibilité de placement dans la ligne)
+            # line finding number (vérifie si le nombre test_number à une seule possibilité de placement dans la ligne)
             for row in range(9):
                 if not (test_number in grid_play[row]):
                     pos_number = []
@@ -219,7 +220,7 @@ def humain_resolution(grid):
                         number_complete += 1
                         grid_play[pos_number[0][0]][pos_number[0][1]] = test_number
 
-            # col finding (vérifie si le nombre test_number à une seule possibilité de placement dans la colonne)
+            # col finding number (vérifie si le nombre test_number à une seule possibilité de placement dans la colonne)
             for col in range(9):
                 if not (test_number in [line[col] for line in grid_play]):
                     pos_number = []
@@ -232,7 +233,7 @@ def humain_resolution(grid):
                         number_complete += 1
                         grid_play[pos_number[0][0]][pos_number[0][1]] = test_number
 
-            # col finding (vérifie si le nombre test_number à une seule possibilité de placement dans la colonne)
+            # col finding number (vérifie si le nombre test_number à une seule possibilité de placement dans la colonne)
             for pos_corner in list(product([0,3,6], repeat=2)):
                 corner_x, corner_y = pos_corner[0], pos_corner[1]
                 list_number_case = []
@@ -251,9 +252,16 @@ def humain_resolution(grid):
                         number_complete += 1
                         grid_play[pos_number[0][0]][pos_number[0][1]] = test_number
 
-
-            # ce qui a été fait : si le nombre n'a pas d'autre possibilité de placement alors je le met
-            # ce qui doit être ajouté : si la cellule n'a qu'une seule possibilité alors je la met
+        
+        # finding unique possibility (si la cellule n'a qu'une seule possibilité alors je la met)
+        for row in range(9):
+            for col in range(9):
+                if is_empty_cell(grid_play,row,col):
+                    possibility = list_possibility(grid_play,row,col)
+                    if len(possibility)==1:
+                        number_complete += 1
+                        grid_play[row][col] = possibility[0]
+                        
 
     print(number_complete, is_all_cell_complete(grid_play), count)
     return grid_play
