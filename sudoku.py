@@ -5,38 +5,6 @@ from random import shuffle, choice
 from copy import deepcopy
 from itertools import product
 
-def retry_on_timeout(max_duration=4, max_retries=100):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            result = [None]
-            attempts = 0
-
-            def target():
-                try:
-                    result[0] = func(*args, **kwargs)
-                except Exception as e:
-                    result[0] = e
-
-            while attempts < max_retries:
-                attempts += 1
-                thread = threading.Thread(target=target)
-                thread.start()
-                thread.join(max_duration)
-
-                if thread.is_alive():
-                    print(f"Tentative {attempts}: La fonction {func.__name__} a pris plus de {max_duration} secondes. Relance...")
-                    thread = None  # Assurer l'arrêt propre du thread
-                else:
-                    # Retourner le résultat si l'exécution a réussi dans le délai imparti
-                    if isinstance(result[0], Exception):
-                        raise result[0]
-                    return result[0]
-
-            # Si on atteint le nombre maximum de tentatives, lever une exception
-            raise TimeoutError(f"La fonction {func.__name__} n'a pas pu etre completee dans les {max_retries} tentatives.")
-        return wrapper
-    return decorator
-
 
 def init_grid():
     grid = [[0,0,0,0,0,0,0,0,0],
@@ -50,7 +18,8 @@ def init_grid():
             [0,0,0,0,0,0,0,0,0]]
     random_line = [i+1 for i in range(9)]
     shuffle(random_line)
-    grid[0] = random_line
+    insert_line = choice([i for i in range(9)])
+    grid[insert_line] = random_line
     return grid
 
 def show_grid(grid):
@@ -128,8 +97,8 @@ def count_solve_grid(grid):
                 return solution_count
     return 1
 
-# @retry_on_timeout()
-def main(choice_number_cell = 81):
+
+def create_sudoku(choice_number_cell = 81):
     # Génération de la grille pleine
     grid_main = init_grid()
     solve_grid(grid_main)
@@ -160,14 +129,15 @@ def main(choice_number_cell = 81):
 def choose_sudoku_difficulty(difficulty = "hard"):
     if difficulty == "extreme" :
         count = 0
-        keep_number_min, grid_min = main(0)
+        keep_number_min, grid_min = create_sudoku(0)
         while count < 50 : 
-            keep_number, grid = main(0)
+            keep_number, grid = create_sudoku(0)
             count += 1
             if keep_number < keep_number_min : 
                 keep_number_min, grid_min = keep_number, grid
         print(keep_number_min)
         return grid_min
+    
     elif difficulty == "hard" :
         value_difficulty = 35
     elif difficulty == "medium" : 
@@ -178,9 +148,9 @@ def choose_sudoku_difficulty(difficulty = "hard"):
         value_difficulty = 81
         
     count = 0
-    keep_number, grid = main(value_difficulty)
+    keep_number, grid = create_sudoku(value_difficulty)
     while  keep_number > value_difficulty and count < 100 : 
-        keep_number, grid = main(value_difficulty)
+        keep_number, grid = create_sudoku(value_difficulty)
         count += 1
     print(keep_number)
     return grid
@@ -214,13 +184,24 @@ grid_1 = [[2,0,0,8,0,0,0,4,0],
           [1,0,0,0,2,0,0,6,8]]
 
 
+grid_3 = [[0,0,0,0,0,4,3,5,0],
+          [1,3,7,2,0,0,0,0,0],
+          [0,0,0,0,0,9,2,0,0],
+          [0,0,3,0,0,0,1,6,0],
+          [0,0,0,0,5,0,7,0,0],
+          [2,6,0,7,0,0,0,0,5],
+          [8,0,1,3,0,0,0,0,0],
+          [0,2,4,0,9,8,0,1,0],
+          [0,5,6,0,0,0,9,0,0]]
+
+
 
 def humain_resolution(grid):
     grid_play = deepcopy(grid)
     count=0
     number_complete = 0
 
-    while (not is_all_cell_complete(grid_play)) and (count<1000):
+    while (not is_all_cell_complete(grid_play)) and (count<100):
         count+=1
 
         for test_number in range(1,10):
@@ -270,9 +251,13 @@ def humain_resolution(grid):
                         number_complete += 1
                         grid_play[pos_number[0][0]][pos_number[0][1]] = test_number
 
-    print(number_complete, is_all_cell_complete(grid_play))
+
+            # ce qui a été fait : si le nombre n'a pas d'autre possibilité de placement alors je le met
+            # ce qui doit être ajouté : si la cellule n'a qu'une seule possibilité alors je la met
+
+    print(number_complete, is_all_cell_complete(grid_play), count)
     return grid_play
 
 
-show_grid(humain_resolution(grid_2))
+show_grid(humain_resolution(grid_3))
 

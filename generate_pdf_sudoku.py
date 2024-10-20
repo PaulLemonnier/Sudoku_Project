@@ -1,8 +1,6 @@
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-import random
 
-id_sudoku = random.randint(10000, 99999)
 
 def dessiner_grille_sudoku(pdf, taille_case=50, marge=40):
     # Définir les dimensions du PDF
@@ -63,15 +61,17 @@ def creer_pdf_sudoku(nom_fichier, grille, titre="Sudoku"):
 
 # Exemple de grille de Sudoku (0 représente une case vide)
 grille_sudoku = [
-[0, 0, 8, 1, 9, 0, 0, 7, 0] ,
-[0, 0, 0, 4, 0, 0, 6, 0, 8] ,
-[6, 0, 0, 8, 5, 7, 0, 0, 0] ,
-[0, 8, 0, 0, 7, 0, 0, 3, 0] ,
-[3, 5, 0, 0, 4, 1, 0, 9, 0] ,
-[2, 0, 0, 3, 0, 0, 5, 6, 0] ,
-[7, 2, 3, 5, 6, 4, 9, 0, 1] ,
-[0, 0, 0, 0, 0, 8, 0, 0, 0] ,
-[0, 6, 9, 0, 0, 0, 0, 0, 5] ,]
+[4, 5, 9, 0, 2, 0, 8, 6, 7] ,
+[6, 1, 3, 5, 8, 7, 4, 2, 9] ,
+[8, 2, 7, 4, 9, 6, 5, 3, 1] ,
+[2, 6, 1, 0, 4, 0, 9, 7, 5] ,
+[5, 7, 4, 9, 6, 2, 3, 1, 8] ,
+[9, 3, 8, 7, 1, 5, 2, 4, 6] ,
+[3, 8, 5, 0, 7, 4, 0, 9, 2] ,
+[7, 9, 2, 0, 3, 0, 0, 5, 4] ,
+[1, 4, 6, 2, 5, 9, 7, 8, 3] ,]
 
 # Générer le fichier PDF
-creer_pdf_sudoku(f"sudoku_hard_{id_sudoku}.pdf", grille_sudoku, f"Sudoku Hard {id_sudoku}")
+id_sudoku = ''.join(map(str,grille_sudoku[0]))
+
+creer_pdf_sudoku(f"sudoku_test_{id_sudoku}.pdf", grille_sudoku, f"Sudoku {id_sudoku}")
