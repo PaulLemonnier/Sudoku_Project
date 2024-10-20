@@ -251,12 +251,28 @@ def humain_resolution(grid):
                         number_complete += 1
                         grid_play[pos_number[0][0]][pos_number[0][1]] = test_number
 
+            # col finding (vérifie si le nombre test_number à une seule possibilité de placement dans la colonne)
+            for pos_corner in list(product([0,3,6], repeat=2)):
+                corner_x, corner_y = pos_corner[0], pos_corner[1]
+                list_number_case = []
+                for row in range(corner_x,corner_x+3):
+                    for col in range(corner_y,corner_y+3):
+                        list_number_case.append(grid_play[row][col])
+                if not (test_number in list_number_case):
+                    pos_number = []
+                    for row in range(corner_x,corner_x+3):
+                        for col in range(corner_y,corner_y+3):
+                            if is_empty_cell(grid_play,row,col):
+                                if test_number in list_possibility(grid_play,row,col):
+                                    pos_number.append([row,col])
+                    if len(pos_number) == 1:
+                        # print('oui',pos_number[0][0],pos_number[0][1],test_number)
+                        number_complete += 1
+                        grid_play[pos_number[0][0]][pos_number[0][1]] = test_number
+
     print(number_complete, is_all_cell_complete(grid_play))
     return grid_play
 
 
 show_grid(humain_resolution(grid_2))
 
-
-
-list(product([0,3,6], repeat=2))
