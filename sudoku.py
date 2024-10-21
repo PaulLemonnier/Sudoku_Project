@@ -77,7 +77,7 @@ def is_all_cell_complete(grid):
     return True
 
 
-def humain_logical_resolution(grid):
+def human_logical_resolution(grid):
     grid_play = deepcopy(grid)
     count=0
     number_complete = 0
@@ -148,7 +148,7 @@ def humain_logical_resolution(grid):
 
 
 def is_logical_resolvable(grid):
-    grid_play = humain_logical_resolution(grid)
+    grid_play = human_logical_resolution(grid)
     return is_all_cell_complete(grid_play)
 
 
@@ -258,7 +258,7 @@ grid_2 = [[0,0,0,0,0,4,3,5,0],
           [0,2,4,0,9,8,0,1,0],
           [0,5,6,0,0,0,9,0,0]]
 
-# show_grid(humain_logical_resolution(grid_3))
+# show_grid(human_logical_resolution(grid_3))
 
 
 # solve_grid(grid_2)
@@ -268,21 +268,6 @@ grid_test = choose_sudoku_difficulty("Normal")
 show_grid(grid_test)
 print(is_logical_resolvable(grid_test))
 
-# number, test_grid = create_sudoku(logical_resolution=True)
-# show_grid(test_grid)
-
-grid_test =[
-[0, 2, 0, 0, 8, 0, 6, 0, 0] ,
-[4, 0, 0, 3, 1, 0, 2, 5, 0] ,
-[1, 6, 0, 7, 9, 0, 0, 0, 0] ,
-[0, 1, 0, 5, 3, 0, 0, 0, 0] ,
-[0, 0, 0, 0, 0, 0, 0, 0, 0] ,
-[6, 0, 3, 0, 0, 0, 0, 0, 0] ,
-[5, 0, 0, 0, 0, 0, 0, 0, 1] ,
-[7, 0, 0, 0, 0, 8, 0, 0, 6] ,
-[0, 0, 0, 0, 7, 0, 4, 3, 0] ,
-]
 
 # print(is_logical_resolvable(grid_test))
-
 # print(count_solve_grid(grid_test))
