@@ -85,7 +85,7 @@ def human_logical_resolution(grid):
     while (not is_all_cell_complete(grid_play)) and (count<10):
         count+=1
 
-        # si le nombre n'a pas d'autre possibilité de placement alors je le met
+        # parcours tous les nombres
         for test_number in range(1,10):
 
             # line finding number (vérifie si le nombre test_number à une seule possibilité de placement dans la ligne)
@@ -233,6 +233,7 @@ def choose_sudoku_difficulty(difficulty = "Normal"):
 
 
 
+
 #########  EXECUTION  #########
 
 
@@ -264,7 +265,7 @@ grid_2 = [[0,0,0,0,0,4,3,5,0],
 # solve_grid(grid_2)
 # show_grid(grid_2)
 
-grid_test = choose_sudoku_difficulty("Normal")
+grid_test = choose_sudoku_difficulty("Extreme")
 show_grid(grid_test)
 print(is_logical_resolvable(grid_test))
 
