@@ -18,8 +18,7 @@ def init_grid():
             [0,0,0,0,0,0,0,0,0]]
     random_line = [i+1 for i in range(9)]
     shuffle(random_line)
-    insert_line = choice([i for i in range(9)])
-    grid[insert_line] = random_line
+    grid[0] = random_line
     return grid
 
 
