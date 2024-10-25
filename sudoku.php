@@ -22,7 +22,7 @@ html{	font-family: 'Oswald';background-color: rgb(37,44,74);color:white;	}
     max-width: 500px;
     max-height: 500px;
     border: 3px solid black;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 
 .cell-input:hover {
@@ -70,7 +70,7 @@ html{	font-family: 'Oswald';background-color: rgb(37,44,74);color:white;	}
     margin-bottom: 40px;
     text-align: center;
     color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px white; /* rgba(67, 170, 224, 1) */
 }
 
 /* Conteneur du header */
@@ -185,13 +185,49 @@ button:hover{
 
     //---------- Récupération de la grille depuis la BDD -------------------
 
-    function recover_bdd_grid($pdo){
-        $sql_select = "SELECT line1,line2,line3,line4,line5,line6,line7,line8,line9 FROM sudoku_grid ORDER BY id DESC LIMIT 1"; // Requête SQL à exécuter
-        $stmt = $pdo->query($sql_select); // Exécution de la requête
+    function recover_bdd_grids($pdo){
+        $sql_select_init = "SELECT line1,line2,line3,line4,line5,line6,line7,line8,line9 FROM sudoku_grid ORDER BY id ASC LIMIT 1"; // Requête SQL à exécuter
+        $stmt = $pdo->query($sql_select_init); // Exécution de la requête
         $result = $stmt->fetch(PDO::FETCH_ASSOC); // Récupère les résultats
-        $grid_bdd = array_map('json_decode', $result); //redimensionne les array
-        return $grid_bdd;
+        $grid_bdd_init = array_map('json_decode', $result); //redimensionne les array
+
+        $sql_select_last = "SELECT line1,line2,line3,line4,line5,line6,line7,line8,line9 FROM sudoku_grid ORDER BY id DESC LIMIT 1"; // Requête SQL à exécuter
+        $stmt = $pdo->query($sql_select_last); // Exécution de la requête
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); // Récupère les résultats
+        $grid_bdd_last = array_map('json_decode', $result); //redimensionne les array
+
+        return ['init_grid' => $grid_bdd_init, 'last_grid' => $grid_bdd_last];
     }
+
+    function show_grid_mix($pdo){
+        $resultat = recover_bdd_grids($pdo);
+        
+        $init_grid = $resultat['init_grid'];
+        $last_grid = $resultat['last_grid'];
+
+        print_r($last_grid[0]);
+        // TODO  VOIR COMMENT PARCOURIR LES DEUX GRIDS
+        for ($row = 0; $row < 9; $row++){
+            for ($col = 0; $col < 9; $col++){
+                $nb_row = $row+1;
+                $nb_col = $col+1;
+                // if ($init_grid[$row][$col]==$last_grid[$row][$col]){
+                    // $value = $last_grid[$row][$col];
+                    // if ($value==0){ 
+                    //     $value=""; 
+                    //     echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value>";
+                    // }else{
+                    //     echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value readonly>";
+                    // }
+                // }else{
+                //     $value = $last_grid[$row][$col];
+                //     echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value>";
+                // }
+                // echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=''>";
+            }
+        }
+    }
+
     
     //---------- Insertion de la grille courante dans la BDD (à la dernière position) -------------------
 
@@ -276,7 +312,7 @@ button:hover{
         <!-- Générer les 81 cases de la grille -->
         <?php 
 
-        show_grid(recover_bdd_grid($pdo));
+        show_grid_mix($pdo);
         // $pdo = null; // Fermeture de la connexion
 
         ?>
