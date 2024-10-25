@@ -137,14 +137,15 @@ button:hover{
     <title>Sudoku</title>
 </head>
 
-<header>
+
+<form method="POST" action="">
 
 <header class="header">
     <div class="container">
         <h1>MySudoku</h1>
         <nav>
             <ul>
-                <li><button type='button'>Generate</button></li>
+                <li><button type='submit' name="submit_generate">Generate</button></li>
                 <li><button type='button'>Reset</button></li>
             </ul>
         </nav>
@@ -156,8 +157,11 @@ button:hover{
 <body>
     
     <div style='text-align: center;margin-bottom:10px;'>
-        <button class='play_button' type='button'>Save</button>
-        <button class='play_button' type='button' disabled>Validate</button>
+        
+            <button class='play_button' type='submit' name="submit_save">Save</button>
+            <button class='play_button' type='submit' name="submit_validate" disabled>Validate</button>
+
+
 
     <?php 
     
@@ -165,51 +169,122 @@ button:hover{
 
     $var1 = 1; 
     $var2 = 2;
-  
-    // print_r(array($var1,$var2));
-    // print_r([$var1,$var2]);
-
-    
-    // $coordinateGrid = array(1,2,3,4,5,6);
-    $coordinateGrid = [];
-    for ($x = 0; $x < 9; $x++) {
-        for ($y = 0; $y < 9; $y++) {
-            $coordinateGrid[] = [$x, $y]; // Liste de coordonnées correspondant à la grille
-        }
-    }
-    $keepNumber = 81;
-
-    // Crée une variable pour le nombre de coordonnées à laisser en possibilité dans la grille
-    $numberCoordinateGridLeft = 20;
-
-    // Supprime dans la grille un nombre aléatoire tant que c'est viable et qu'il n'y a pas x nombres supprimés
-    // print_r($coordinateGrid);
-    // echo $numberCoordinateGridLeft;
-;
-    
-
 
     ?>
 
+    <?php
+
+    $databaseFile = 'db_sudoky.db';
+
+    try {
+        $pdo = new PDO("sqlite:$databaseFile"); // Connexion à la base de données SQLite        
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Configuration pour générer des exceptions en cas d'erreur
+    } catch (PDOException $e) { // Gestion des erreurs
+        echo "Erreur de connexion ou d'exécution : " . $e->getMessage();
+    }
+
+    //---------- Récupération de la grille depuis la BDD -------------------
+
+    function recover_bdd_grid($pdo){
+        $sql_select = "SELECT line1,line2,line3,line4,line5,line6,line7,line8,line9 FROM sudoku_grid ORDER BY id DESC LIMIT 1"; // Requête SQL à exécuter
+        $stmt = $pdo->query($sql_select); // Exécution de la requête
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); // Récupère les résultats
+        $grid_bdd = array_map('json_decode', $result); //redimensionne les array
+        return $grid_bdd;
+    }
+    
+    //---------- Insertion de la grille courante dans la BDD (à la dernière position) -------------------
+
+    function insert_bdd_grid($pdo, $grid_to_bdd){
+        $lineData1 = json_encode($grid_to_bdd[0]); // Convertir la liste en JSON
+        $lineData2 = json_encode($grid_to_bdd[1]);
+        $lineData3 = json_encode($grid_to_bdd[2]);
+        $lineData4 = json_encode($grid_to_bdd[3]);
+        $lineData5 = json_encode($grid_to_bdd[4]);
+        $lineData6 = json_encode($grid_to_bdd[5]);
+        $lineData7 = json_encode($grid_to_bdd[6]);
+        $lineData8 = json_encode($grid_to_bdd[7]);
+        $lineData9 = json_encode($grid_to_bdd[8]);
+
+        $sql_insert = "INSERT INTO sudoku_grid (line1,line2,line3,line4,line5,line6,line7,line8,line9) 
+        VALUES (:lineData1,:lineData2,:lineData3,:lineData4,:lineData5,:lineData6,:lineData7,:lineData8,:lineData9)"; // Requête d'insertion dans la BDD
+        // $sql_update = "UPDATE sudoku_grid SET line1=:lineData1, line2=:lineData2, line3=:lineData3, line4=:lineData4, line5=:lineData5, line6=:lineData6, line7=:lineData7, line8=:lineData8, line9=:lineData9
+        // WHERE line1 = (SELECT line1 FROM sudoku_grid LIMIT 1)";
+        $stmt = $pdo->prepare($sql_insert);
+        $stmt->execute([':lineData1' => $lineData1,':lineData2' => $lineData2,':lineData3' => $lineData3,':lineData4' => $lineData4,':lineData5' => $lineData5,':lineData6' => $lineData6,':lineData7' => $lineData7,':lineData8' => $lineData8,':lineData9' => $lineData9]); // Exécuter la requête en passant les paramètres
+    }
+
+    // Si le bouton Save est pressé
+    if (isset($_POST['submit_save'])) {
+
+        $grid_to_bdd = array();
+        for ($row = 1; $row <= 9; $row++) {
+            $line_to_bdd = array();
+            for ($col = 1; $col <= 9; $col++) {
+                $val_input = $_POST[strval($row).strval($col)]; //récupère toutes les cases et les insère dans une array
+                if ($val_input==""){$val_input=0;}
+                array_push($line_to_bdd,intval($val_input));
+            }
+            array_push($grid_to_bdd,$line_to_bdd);
+        }
+
+        insert_bdd_grid($pdo, $grid_to_bdd);
+        
+    }
+
+    //---------- Génération d'une nouvelle grille et génération de la table dans la BDD -------------------
+
+    function generate_bdd_grid($pdo, $grid){
+        $lineData1 = json_encode($grid[0]); // Convertir la liste en JSON
+        $lineData2 = json_encode($grid[1]);
+        $lineData3 = json_encode($grid[2]);
+        $lineData4 = json_encode($grid[3]);
+        $lineData5 = json_encode($grid[4]);
+        $lineData6 = json_encode($grid[5]);
+        $lineData7 = json_encode($grid[6]);
+        $lineData8 = json_encode($grid[7]);
+        $lineData9 = json_encode($grid[8]);
+
+        $sql_drop = "DROP TABLE IF EXISTS sudoku_grid";
+        $pdo->query($sql_drop);
+        $sql_create = "CREATE TABLE IF NOT EXISTS sudoku_grid(
+               id INTEGER PRIMARY KEY AUTOINCREMENT, 
+               line1 TEXT, line2 TEXT, line3 TEXT, line4 TEXT, line5 TEXT, line6 TEXT, line7 TEXT, line8 TEXT, line9 TEXT)";
+        $pdo->query($sql_create);
+        $sql_insert = "INSERT INTO sudoku_grid (line1,line2,line3,line4,line5,line6,line7,line8,line9) 
+        VALUES (:lineData1,:lineData2,:lineData3,:lineData4,:lineData5,:lineData6,:lineData7,:lineData8,:lineData9)"; // Requête d'insertion dans la BDD
+        $stmt = $pdo->prepare($sql_insert); // Exécution de la requête
+        $stmt->execute([':lineData1' => $lineData1,':lineData2' => $lineData2,':lineData3' => $lineData3,':lineData4' => $lineData4,':lineData5' => $lineData5,':lineData6' => $lineData6,':lineData7' => $lineData7,':lineData8' => $lineData8,':lineData9' => $lineData9]); // Exécuter la requête en passant les paramètres
+    }
+
+
+    // Si le bouton Generate est pressé
+    if (isset($_POST['submit_generate'])) {
+
+        $new_grid = choose_sudoku_difficulty("Normal");
+        generate_bdd_grid($pdo, $new_grid);
+    }
+
+    ?>
+
+
     </div>
 
+
     <div class="sudoku-grid">
-        
 
         <!-- Générer les 81 cases de la grille -->
-        <!-- <input type="number" class="cell-input" maxlength="1" min="0" max="9"> -->
         <?php 
-        
-        $grid = choose_sudoku_difficulty("Normal");
 
-        // list($keep_number, $grid) = create_sudoku(true);
-        // echo $keep_number;
-        show_grid($grid);
+        show_grid(recover_bdd_grid($pdo));
+        // $pdo = null; // Fermeture de la connexion
 
         ?>
 
     </div>
+
 </body>
+</form>
 
 <?php
 
@@ -218,20 +293,21 @@ function init_grid() {
     $grid = array_fill(0, 9, array_fill(0, 9, 0)); 
     $random_line = range(1, 9); 
     shuffle($random_line);
-    $insert_line = rand(0, 8);
-    $grid[$insert_line] = $random_line;
+    $grid[0] = $random_line;
     return $grid;
 }
 
 // Insertion dans la page d'une grille
 function show_grid($grid){
-    $id = 0;
+    $nb_row = 0;
     foreach ($grid as $line) { 
+        $nb_row++;
+        $nb_col = 0;
         foreach ($line as $value) {
-            $id++;
-            $var_disabled='disabled';
+            $nb_col++;
+            $var_disabled='readonly';
             if ($value==0){ $value=""; $var_disabled='';}
-            echo "<input id=$id type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value $var_disabled>";
+            echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value $var_disabled>";
         }
     }
 }
