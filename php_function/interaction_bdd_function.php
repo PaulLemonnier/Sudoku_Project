@@ -28,16 +28,14 @@ function show_grid_mix($pdo){
         $nb_row = $row+1;
         for ($col = 0; $col < 9; $col++){
             $nb_col = $col+1;
+            $value = $last_grid[$row][$col];
             if ($init_grid[$row][$col]==$last_grid[$row][$col]){
-                $value = $last_grid[$row][$col];
-                if ($value==0 | $value=='0'){ 
-                    $value="''"; 
+                if ($value==0 | $value=='0'){ $value="''"; 
                     echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value>";
                 }else{
                     echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input init-input' maxlength='1' min='0' max='9' value=$value readonly>";
                 }
             }else{
-                $value = $last_grid[$row][$col];
                 if ($value==0 | $value=='0'){ $value="''"; }
                 echo "<input id=$nb_row$nb_col  name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value>";
             }

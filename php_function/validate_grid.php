@@ -57,6 +57,9 @@ if (isset($_POST['ajax_grid_data'])) {
     } else {
         echo "<span style='font-weight:bold;color:#f42e35'>Essaye encore !</span>";
     }
+
+    header('Location: sudoku.php');
+    exit;
 }
 
 

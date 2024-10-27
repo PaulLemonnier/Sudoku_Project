@@ -92,6 +92,9 @@
             array_push($grid_to_bdd,$line_to_bdd);
         }
         insert_bdd_grid($pdo, $grid_to_bdd);
+
+        header('Location: sudoku.php');
+        exit;
     }
 
 
@@ -100,6 +103,8 @@
     if (isset($_POST['submit_generate'])) {
         $new_grid = choose_sudoku_difficulty("Normal");
         generate_bdd_grid($pdo, $new_grid);
+        header('Location: sudoku.php');
+        exit;
     }
 
 

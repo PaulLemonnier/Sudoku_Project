@@ -33,10 +33,10 @@ cursor = conn.cursor()
 # cursor.execute("""INSERT INTO sudoku_grid (line1,line2,line3,line4,line5,line6,line7,line8,line9) VALUES(?,?,?,?,?,?,?,?,?)""",
 #                (line_data,line_data,line_data,line_data,line_data,line_data,line_data,line_data,line_data))
 
-cursor.execute("""INSERT INTO score (point) VALUES(0)""")
+# cursor.execute("""INSERT INTO score (point) VALUES(0)""")
 
 # Extraction de la donnée
-cursor.execute("""SELECT point FROM score LIMIT 1;""")
+cursor.execute("""SELECT * FROM sudoku_grid LIMIT 10;""")
 rows = cursor.fetchall()
 # for row in rows:
 #     for i in range(9):
