@@ -7,11 +7,11 @@
 
     <link rel="icon" href="images/grid.ico" type="image/x-icon">
 
-    <link rel="stylesheet" href="sudoku.css">
+    <link rel="stylesheet" href="css/sudoku.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <?php include 'sudoku_basic_function.php'; ?>
-    <?php include 'interaction_bdd_function.php'; ?>
+    <?php include 'php_function/sudoku_basic_function.php'; ?>
+    <?php include 'php_function/interaction_bdd_function.php'; ?>
 
     <title>Sudoku</title>
 
@@ -42,7 +42,7 @@
 
     $already_validate_with_success = "false";
 
-    $databaseFile = 'db_sudoky.db';
+    $databaseFile = 'Database/db_sudoky.db';
 
     try {
         $pdo = new PDO("sqlite:$databaseFile"); // Connexion à la base de données SQLite        
@@ -175,7 +175,7 @@ $(document).ready(function () {
         // Envoyer les données avec AJAX
         $.ajax({
             type: 'POST',
-            url: 'validate_grid.php',
+            url: 'php_function/validate_grid.php',
             data: { ajax_grid_data: JSON.stringify(gridData) },
             success: function (response) {
                 // Afficher la réponse dans le div "resultat"
