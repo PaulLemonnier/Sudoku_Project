@@ -1,7 +1,7 @@
 import sqlite3
 import json
 
-conn = sqlite3.connect("db_sudoky.db")
+conn = sqlite3.connect("Database/db_sudoky.db")
 
 cursor = conn.cursor()
 
@@ -24,9 +24,7 @@ cursor = conn.cursor()
 #             )
 # """)
 
-# cursor.execute("""CREATE TABLE IF NOT EXISTS score(
-#                point INTEGER
-#             )""")
+# cursor.execute("""CREATE TABLE IF NOT EXISTS score(point INTEGER)""")
 
 # line_data = json.dumps([0,0,0,0,0,0,0,0,0]) 
 # print(line_data)
@@ -35,7 +33,7 @@ cursor = conn.cursor()
 # cursor.execute("""INSERT INTO sudoku_grid (line1,line2,line3,line4,line5,line6,line7,line8,line9) VALUES(?,?,?,?,?,?,?,?,?)""",
 #                (line_data,line_data,line_data,line_data,line_data,line_data,line_data,line_data,line_data))
 
-# cursor.execute("""INSERT INTO score (point) VALUES(0)""")
+cursor.execute("""INSERT INTO score (point) VALUES(0)""")
 
 # Extraction de la donnée
 cursor.execute("""SELECT point FROM score LIMIT 1;""")

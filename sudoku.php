@@ -27,7 +27,7 @@
 
 <header class="header">
     <div class="container">
-        <h1>MySudoku</h1>
+        <h1 onclick="location.reload();">MySudoku</h1>
         <nav>
             <ul>
                 <li><button type='submit' name="submit_generate">Generate</button></li>
