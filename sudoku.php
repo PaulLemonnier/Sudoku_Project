@@ -122,7 +122,12 @@
 
         show_grid_mix($pdo); // Affichage de la grille depuis la BDD
         // $pdo = null; // Fermeture de la connexion
+        
+        // $resultat = recover_bdd_grids($pdo);
+    
+        // $last_grid = array_values($resultat['last_grid']);
 
+        // print_r(next_move_resolution($last_grid));
         ?>
 
     </div>

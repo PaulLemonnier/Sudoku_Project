@@ -187,6 +187,102 @@ function human_logical_resolution($grid) {
     return $grid_play;
 }
 
+
+// Complète une grille avec une résolution logique
+function next_move_resolution($grid) {
+    $grid_play = unserialize(serialize($grid));
+    $count = 0;
+
+    while (!is_all_cell_complete($grid_play) && $count < 10) {
+        $count++;
+
+        // Parcours tous les nombres
+        for ($test_number = 1; $test_number <= 9; $test_number++) {
+
+            // Recherche du nombre dans les lignes (vérifie si le nombre $test_number a une seule possibilité de placement dans la ligne)
+            for ($row = 0; $row < 9; $row++) {
+                if (!in_array($test_number, $grid_play[$row])) {
+                    $pos_number = [];
+                    for ($col = 0; $col < 9; $col++) {
+                        if (is_empty_cell($grid_play, $row, $col)) {
+                            if (in_array($test_number, list_possibility($grid_play, $row, $col))) {
+                                $pos_number[] = [$row, $col];
+                            }
+                        }
+                    }
+                    if (count($pos_number) === 1) {
+                        return [$test_number, $pos_number[0][0], $pos_number[0][1]];
+                    }
+                }
+            }
+
+            // Recherche du nombre dans les colonnes (vérifie si le nombre $test_number a une seule possibilité de placement dans la colonne)
+            for ($col = 0; $col < 9; $col++) {
+                $column_numbers = array_column($grid_play, $col);
+                if (!in_array($test_number, $column_numbers)) {
+                    $pos_number = [];
+                    for ($row = 0; $row < 9; $row++) {
+                        if (is_empty_cell($grid_play, $row, $col)) {
+                            if (in_array($test_number, list_possibility($grid_play, $row, $col))) {
+                                $pos_number[] = [$row, $col];
+                            }
+                        }
+                    }
+                    if (count($pos_number) === 1) {
+                        return [$test_number, $pos_number[0][0], $pos_number[0][1]];
+                    }
+                }
+            }
+
+            // Recherche du nombre dans les blocs 3x3
+            foreach ([[0,0], [0,3], [0,6], [3,0], [3,3], [3,6], [6,0], [6,3], [6,6]] as $pos_corner) {
+                $corner_x = $pos_corner[0];
+                $corner_y = $pos_corner[1];
+                $list_number_case = [];
+
+                for ($row = $corner_x; $row < $corner_x + 3; $row++) {
+                    for ($col = $corner_y; $col < $corner_y + 3; $col++) {
+                        $list_number_case[] = $grid_play[$row][$col];
+                    }
+                }
+
+                if (!in_array($test_number, $list_number_case)) {
+                    $pos_number = [];
+                    for ($row = $corner_x; $row < $corner_x + 3; $row++) {
+                        for ($col = $corner_y; $col < $corner_y + 3; $col++) {
+                            if (is_empty_cell($grid_play, $row, $col)) {
+                                if (in_array($test_number, list_possibility($grid_play, $row, $col))) {
+                                    $pos_number[] = [$row, $col];
+                                }
+                            }
+                        }
+                    }
+                    if (count($pos_number) === 1) {
+                        return [$test_number, $pos_number[0][0], $pos_number[0][1]];
+                    }
+                }
+            }
+        }
+
+        // Recherche d'une possibilité unique (si la cellule n'a qu'une seule possibilité alors on la place)
+        for ($row = 0; $row < 9; $row++) {
+            for ($col = 0; $col < 9; $col++) {
+                if (is_empty_cell($grid_play, $row, $col)) {
+                    $possibility = list_possibility($grid_play, $row, $col);
+                    if (count($possibility) === 1) {
+                        return [$possibility[0], $row, $col];
+                    }
+                }
+            }
+        }
+    }
+
+    return [0,0,0];
+}
+
+
+
+
 // Vérifie si la résolutin est logique
 function is_logical_resolvable($grid) {
     $grid_play = human_logical_resolution($grid);
