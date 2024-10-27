@@ -18,7 +18,7 @@ function show_grid($grid){
         foreach ($line as $value) {
             $nb_col++;
             $var_disabled='readonly';
-            if ($value==0){ $value=""; $var_disabled='';}
+            if ($value==0){ $value="''"; $var_disabled='';}
             echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value $var_disabled>";
         }
     }
