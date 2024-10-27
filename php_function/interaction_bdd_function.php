@@ -30,7 +30,7 @@ function show_grid_mix($pdo){
             $nb_col = $col+1;
             if ($init_grid[$row][$col]==$last_grid[$row][$col]){
                 $value = $last_grid[$row][$col];
-                if ($value==0){ 
+                if ($value==0 | $value=='0'){ 
                     $value="''"; 
                     echo "<input id=$nb_row$nb_col name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value>";
                 }else{
@@ -38,6 +38,7 @@ function show_grid_mix($pdo){
                 }
             }else{
                 $value = $last_grid[$row][$col];
+                if ($value==0 | $value=='0'){ $value="''"; }
                 echo "<input id=$nb_row$nb_col  name=$nb_row$nb_col  type='number' class='cell-input' maxlength='1' min='0' max='9' value=$value>";
             }
         }
