@@ -40,8 +40,6 @@
 
     //---------- Connexion à la BDD -------------------
 
-    $already_validate_with_success = "false";
-
     $databaseFile = 'Database/db_sudoky.db';
 
     try {
@@ -130,13 +128,12 @@
 const form = document.getElementById('myForm');
 const submitValidate = document.getElementById('submit_validate');
 const inputs = form.querySelectorAll('input');
-var alreadyValidateWithSuccess = <?php echo $already_validate_with_success; ?>
 
 // Fonction pour vérifier si tous les inputs requis sont remplis
 function checkInputs() {
     let allFilled = true;
     inputs.forEach(input => {
-        if (!input.value | input.value==0 | alreadyValidateWithSuccess) {
+        if (!input.value | input.value==0) {
             allFilled = false;  
         }
     });
@@ -187,6 +184,34 @@ $(document).ready(function () {
         });
     });
 });
+
+
+
+
+const cells = document.querySelectorAll('.cell-input');
+
+// Ajoutez les événements mouseover et mouseout
+cells.forEach(cell => {
+    cell.addEventListener('mouseover', () => {
+        const currentValue = cell.value;
+        if (currentValue) { // Vérifiez que la valeur n'est pas vide
+            // Appliquez la classe highlight aux autres cases avec la même valeur
+            cells.forEach(otherCell => {
+                if (otherCell.value === currentValue) {
+                    otherCell.classList.add('highlight');
+                }
+            });
+        }
+    });
+
+    cell.addEventListener('mouseout', () => {
+        // Enlevez la classe highlight lorsque le survol se termine
+        cells.forEach(otherCell => {
+            otherCell.classList.remove('highlight');
+        });
+    });
+});
+
 
 
 </script>

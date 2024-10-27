@@ -21,6 +21,8 @@ html{	font-family: 'Oswald';background-color: rgb(37,44,74);color:white;	}
     background-color: #edeeff;
 }
 
+
+
 .cell-input {
     border: 1px solid #999;
     display: flex;
@@ -32,6 +34,10 @@ html{	font-family: 'Oswald';background-color: rgb(37,44,74);color:white;	}
     height: 100%;
     box-sizing: border-box;
     outline: none;
+}
+
+.highlight {
+    background-color: hsl(237, 70%, 96%);
 }
 
 
@@ -121,3 +127,5 @@ button:hover{
     margin-right:20px;
 
 }
+
+

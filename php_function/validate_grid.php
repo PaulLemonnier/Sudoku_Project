@@ -45,7 +45,7 @@ function update_bdd_point($pdo){
 
 
 if (isset($_POST['ajax_grid_data'])) {
-    $pdo = database_connection('db_sudoky.db'); // connexion à la BDD
+    $pdo = database_connection('../Database/db_sudoky.db'); // connexion à la BDD
     $grid_to_bdd = json_decode($_POST['ajax_grid_data'], true); // Récupération de la grille actuelle (from JS)
     $resultat = recover_bdd_grids($pdo); //récupère les grilles
     $init_grid = array_values($resultat['init_grid']); //récupère la grille initiale
@@ -53,14 +53,9 @@ if (isset($_POST['ajax_grid_data'])) {
 
     if (compare_grid($init_grid, $grid_to_bdd)) {
         echo "<span style='font-weight:bold;color:#34c434'>Bravo !</span>";
-        $already_validate_with_success = "true";
         update_bdd_point($pdo);
-
     } else {
         echo "<span style='font-weight:bold;color:#f42e35'>Essaye encore !</span>";
-        $already_validate_with_success = "false";
-
-
     }
 }
 
