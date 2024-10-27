@@ -1,3 +1,6 @@
 # Sudoku_Project
 
-Le projet à pour but d'élaborer un algorithme de création de grille de sudoku en ligne pour une utilisation personnel.
+## Structuration du projet :
+
+**Database** :
+Contient la base de donnée SQLite (.db) ainsi que le fichier python permettant la création de la base ainsi qu'un requêtage simplifié à la base de données
