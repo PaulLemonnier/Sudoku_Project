@@ -82,10 +82,8 @@ $(document).ready(function () {
             type: 'POST',
             url: 'php_function/hint_grid.php',
             data: { grid_for_hint: JSON.stringify(gridData) },
-            
             success: function (response) {
-                // Change de background color de la case
-                let element = document.getElementById(Number(response));
+                let element = document.getElementById(Number(response)); //selection de la case pour le prochain move
                 if (element) { 
                     element.style.backgroundColor = "rgba(251, 216, 36, 1)"; // Change la couleur de fond
                     // Remettre la couleur de fond initiale après 10 secondes
@@ -93,7 +91,7 @@ $(document).ready(function () {
                         element.style.backgroundColor = ""; // Remettre à la couleur de fond par défaut
                     }, 3000);
                 } else { 
-                    console.log("L'élément avec l'ID " + response + " n'a pas été trouvé.");
+                    console.log("Cellule : " + response + " non trouvé");
                 }
                 
             },

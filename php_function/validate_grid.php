@@ -31,7 +31,7 @@ function recover_bdd_grids($pdo){
     return ['init_grid' => $grid_bdd_init, 'last_grid' => $grid_bdd_last];
 }
 
-
+// met à jour les points (en ajoutant 1) dans la base de données score
 function update_bdd_point($pdo){
     $sql_recover_point = "SELECT point FROM score LIMIT 1"; // Requête SQL à exécuter
     $stmt = $pdo->query($sql_recover_point); // Exécution de la requête
@@ -39,21 +39,21 @@ function update_bdd_point($pdo){
 
     $sql_update = "UPDATE score SET point=$point+1 WHERE point = (SELECT point FROM score LIMIT 1)";
     $stmt = $pdo->prepare($sql_update);
-    $stmt->execute(); // Exécuter la requête en passant les paramètres
+    $stmt->execute();
 }
 
 
 
 if (isset($_POST['ajax_grid_data'])) {
     $pdo = database_connection('../Database/db_sudoky.db'); // connexion à la BDD
-    $grid_to_bdd = json_decode($_POST['ajax_grid_data'], true); // Récupération de la grille actuelle (from JS)
+    $actual_grid = json_decode($_POST['ajax_grid_data'], true); // Récupération de la grille actuelle (from JS)
     $resultat = recover_bdd_grids($pdo); //récupère les grilles
     $init_grid = array_values($resultat['init_grid']); //récupère la grille initiale
     solve_grid($init_grid); //transforme la grille initial en grille solution
 
-    if (compare_grid($init_grid, $grid_to_bdd)) {
+    if (compare_grid($init_grid, $actual_grid)) { //si la grille résultat est égale à notre grille
         echo "<span style='font-weight:bold;color:#34c434'>Bravo ! +1</span>";
-        update_bdd_point($pdo);
+        update_bdd_point($pdo); //met à jour les points dans la BDD
     } else {
         echo "<span style='font-weight:bold;color:#f42e35'>Essaye encore !</span>";
     }
