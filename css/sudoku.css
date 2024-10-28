@@ -113,7 +113,7 @@ button{
     background: rgb(57,64,94);
     color: white;
     border-color: white;
-
+    font-family: 'Oswald';
 }
 
 button:hover{
