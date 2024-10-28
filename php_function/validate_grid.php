@@ -45,7 +45,7 @@ function update_bdd_point($pdo){
 
 
 if (isset($_POST['ajax_grid_data'])) {
-    $pdo = database_connection('../Database/db_sudoky.db'); // connexion à la BDD
+    $pdo = database_connection('../Database/grid_sudoku.db'); // connexion à la BDD
     $actual_grid = json_decode($_POST['ajax_grid_data'], true); // Récupération de la grille actuelle (from JS)
     $resultat = recover_bdd_grids($pdo); //récupère les grilles
     $init_grid = array_values($resultat['init_grid']); //récupère la grille initiale

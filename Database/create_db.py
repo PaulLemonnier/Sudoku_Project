@@ -1,7 +1,7 @@
 import sqlite3
 import json
 
-conn = sqlite3.connect("Database/db_sudoky.db")
+conn = sqlite3.connect("Database/grid_sudoku.db")
 
 cursor = conn.cursor()
 

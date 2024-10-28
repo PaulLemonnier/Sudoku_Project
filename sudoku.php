@@ -43,7 +43,7 @@
 
     //---------- Connexion à la BDD -------------------
 
-    $databaseFile = 'Database/db_sudoky.db';
+    $databaseFile = 'Database/grid_sudoku.db';
 
     try {
         $pdo = new PDO("sqlite:$databaseFile"); // Connexion à la base de données SQLite        
@@ -128,11 +128,6 @@
         show_grid_mix($pdo); // Affichage de la grille depuis la BDD
         // $pdo = null; // Fermeture de la connexion
         
-        // $resultat = recover_bdd_grids($pdo);
-    
-        // $last_grid = array_values($resultat['last_grid']);
-
-        // print_r(next_move_resolution($last_grid));
         ?>
 
     </div>
