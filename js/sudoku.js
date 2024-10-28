@@ -40,7 +40,6 @@ $(document).ready(function () {
             }
             gridData.push(lineData);
         }
-        console.log(gridData);
 
         // Envoyer les données avec AJAX
         $.ajax({
@@ -50,6 +49,10 @@ $(document).ready(function () {
             success: function (response) {
                 // Afficher la réponse dans le div "resultat"
                 $('#result_validation').html(response);
+
+                if (response.includes("Bravo ! +1")) {
+                    $('#submit_validate').prop('disabled', true); // Désactiver le bouton
+                }
             },
             error: function () {
                 $('#result_validation').text('Erreur lors de l\'envoi des données.');
@@ -57,6 +60,50 @@ $(document).ready(function () {
         });
     });
 });
+
+
+//---------- Envoie formulaire Hint (Ajax JQuery) -------------------
+
+$(document).ready(function () {
+    $('#submit_hint').click(function () {
+        // Récupérer les données du formulaire
+        var gridData = [];
+        for (var row = 1; row <= 9; row++) {
+            var lineData = [];
+            for (var col = 1; col <= 9; col++) {
+                var inputValue = $('input[name="' + row + col + '"]').val();
+                lineData.push(inputValue === "" ? 0 : parseInt(inputValue));
+            }
+            gridData.push(lineData);
+        }
+
+        // Envoyer les données avec AJAX
+        $.ajax({
+            type: 'POST',
+            url: 'php_function/hint_grid.php',
+            data: { grid_for_hint: JSON.stringify(gridData) },
+            
+            success: function (response) {
+                // Change de background color de la case
+                let element = document.getElementById(Number(response));
+                if (element) { 
+                    element.style.backgroundColor = "rgba(251, 216, 36, 1)"; // Change la couleur de fond
+                    // Remettre la couleur de fond initiale après 10 secondes
+                    setTimeout(function() { 
+                        element.style.backgroundColor = ""; // Remettre à la couleur de fond par défaut
+                    }, 3000);
+                } else { 
+                    console.log("L'élément avec l'ID " + response + " n'a pas été trouvé.");
+                }
+                
+            },
+            error: function () {
+                $('#result_validation').text('Pas d\'indice.');
+            }
+        });
+    });
+});
+
 
 
 

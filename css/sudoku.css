@@ -1,6 +1,6 @@
  
 /* Styles généraux */
-html{	font-family: 'Oswald';background-color: rgb(37,44,74);color:white;	}
+html{	font-family: 'Oswald'; background-color: rgb(37,44,74); color:white;	}
 
 /* Styles de la grille de Sudoku */
 .sudoku-grid {
@@ -22,12 +22,11 @@ html{	font-family: 'Oswald';background-color: rgb(37,44,74);color:white;	}
 }
 
 
-
 .cell-input {
     border: 1px solid #999;
     display: flex;
     align-items: center;
-    font-size: 24px;
+    font-size: 22px;
     text-align: center;
     background-color: #fff;
     width: 100%;
@@ -108,7 +107,6 @@ nav ul li a:hover {
 
 
 button{
-    font-family: 'Oswald';
     height: 35px;
     width: 80px;	
     border-radius: 5px;

@@ -52,14 +52,12 @@ if (isset($_POST['ajax_grid_data'])) {
     solve_grid($init_grid); //transforme la grille initial en grille solution
 
     if (compare_grid($init_grid, $grid_to_bdd)) {
-        echo "<span style='font-weight:bold;color:#34c434'>Bravo !</span>";
+        echo "<span style='font-weight:bold;color:#34c434'>Bravo ! +1</span>";
         update_bdd_point($pdo);
     } else {
         echo "<span style='font-weight:bold;color:#f42e35'>Essaye encore !</span>";
     }
 
-    header('Location: sudoku.php');
-    exit;
 }
 
 

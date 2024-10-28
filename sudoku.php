@@ -7,6 +7,8 @@
 
     <link rel="icon" href="images/grid.ico" type="image/x-icon">
 
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/sudoku.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
@@ -73,6 +75,7 @@
         
             <button class='play_button' type='submit' name="submit_save">Save</button>
             <button id='submit_validate' class='play_button' type='button' name="submit_validate">Validate</button>
+            <button id='submit_hint' class='play_button' type='button' name='submit_hint' style='width:40px;margin-left:0px;'><i class='fas fa-lightbulb'></i></button>
             <span id="result_validation"></span>
 
 
@@ -107,6 +110,8 @@
         exit;
     }
 
+    
+
 
 
     ?>
@@ -132,7 +137,10 @@
 
     </div>
 
+
     <script src="js/sudoku.js"></script>
+
+
 
 
 
