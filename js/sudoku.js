@@ -25,43 +25,6 @@ inputs.forEach(input => {
 checkInputs();
 
 
-
- //---------- Envoie formulaire Validate (Ajax JQuery) -------------------
-
-$(document).ready(function () {
-    $('#submit_validate').click(function () {
-        // Récupérer les données du formulaire
-        var gridData = [];
-        for (var row = 1; row <= 9; row++) {
-            var lineData = [];
-            for (var col = 1; col <= 9; col++) {
-                var inputValue = $('input[name="' + row + col + '"]').val();
-                lineData.push(inputValue === "" ? 0 : parseInt(inputValue));
-            }
-            gridData.push(lineData);
-        }
-
-        // Envoyer les données avec AJAX
-        $.ajax({
-            type: 'POST',
-            url: 'php_function/validate_grid.php',
-            data: { ajax_grid_data: JSON.stringify(gridData) },
-            success: function (response) {
-                // Afficher la réponse dans le div "resultat"
-                $('#result_validation').html(response);
-
-                if (response.includes("Bravo ! +1")) {
-                    $('#submit_validate').prop('disabled', true); // Désactiver le bouton
-                }
-            },
-            error: function () {
-                $('#result_validation').text('Erreur lors de l\'envoi des données.');
-            }
-        });
-    });
-});
-
-
 //---------- Envoie formulaire Hint (Ajax JQuery) -------------------
 
 $(document).ready(function () {
@@ -85,11 +48,11 @@ $(document).ready(function () {
             success: function (response) {
                 let element = document.getElementById(Number(response)); //selection de la case pour le prochain move
                 if (element) { 
-                    element.style.backgroundColor = "rgba(251, 216, 36, 1)"; // Change la couleur de fond
+                    element.style.backgroundColor = "rgba(255, 229, 95, 1)"; // Change la couleur de fond
                     // Remettre la couleur de fond initiale après 10 secondes
                     setTimeout(function() { 
                         element.style.backgroundColor = ""; // Remettre à la couleur de fond par défaut
-                    }, 3000);
+                    }, 2000);
                 } else { 
                     console.log("Cellule : " + response + " non trouvé");
                 }

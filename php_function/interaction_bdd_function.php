@@ -92,6 +92,33 @@ function generate_bdd_grid($pdo, $grid){
     $stmt->execute([':lineData1' => $lineData1,':lineData2' => $lineData2,':lineData3' => $lineData3,':lineData4' => $lineData4,':lineData5' => $lineData5,':lineData6' => $lineData6,':lineData7' => $lineData7,':lineData8' => $lineData8,':lineData9' => $lineData9]); // Exécuter la requête en passant les paramètres
 }
 
+//---------- Met à jour les points (en ajoutant 1) dans la base de données score -------------------
+function update_bdd_point($pdo){
+    $sql_recover_point = "SELECT point FROM score LIMIT 1"; // Requête SQL à exécuter
+    $stmt = $pdo->query($sql_recover_point); // Exécution de la requête
+    $point = $stmt->fetch(PDO::FETCH_ASSOC)['point']; // Récupère les points
+
+    $sql_update = "UPDATE score SET point=$point+1 WHERE point = (SELECT point FROM score LIMIT 1)";
+    $stmt = $pdo->prepare($sql_update);
+    $stmt->execute();
+}
+
+//---------- Met à jour la session dans la base de données score -------------------
+function update_session_validation_bdd($pdo, $value){
+    $sql_update = "UPDATE score SET session=$value WHERE session = (SELECT session FROM score LIMIT 1)";
+    $stmt = $pdo->prepare($sql_update);
+    $stmt->execute();
+}
+
+function recover_bdd_session($pdo){
+    $sql_recover_session = "SELECT session FROM score LIMIT 1"; // Requête SQL à exécuter
+    $stmt = $pdo->query($sql_recover_session); // Exécution de la requête
+    $session = $stmt->fetch(PDO::FETCH_ASSOC)['session']; // Récupère les points
+    return $session;
+}
+
+
+
 
 
 ?>

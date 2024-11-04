@@ -2,6 +2,29 @@
 /* Styles généraux */
 html{	font-family: 'Oswald'; background-color: rgb(37,44,74); color:white;	}
 
+/* Conteneur du header */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: -10px 15px -10px 15px;
+}
+
+.header {
+    background-color: None;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 8px white; /* rgba(67, 170, 224, 1) */
+}
+
+h1:hover{ color:#204a6c; }
+
+
 /* Styles de la grille de Sudoku */
 .sudoku-grid {
     margin-left: auto;
@@ -17,11 +40,6 @@ html{	font-family: 'Oswald'; background-color: rgb(37,44,74); color:white;	}
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 
-.cell-input:hover {
-    background-color: #edeeff;
-}
-
-
 .cell-input {
     border: 1px solid #999;
     display: flex;
@@ -35,50 +53,24 @@ html{	font-family: 'Oswald'; background-color: rgb(37,44,74); color:white;	}
     outline: none;
 }
 
-.highlight {
-    background-color: hsl(237, 70%, 96%);
-}
+.cell-input:hover { background-color: #cfd1f3; }
+
+.highlight { background-color:hsl(237, 60%, 90%); }
+
+
 
 
 /* Bordures plus épaisses pour les blocs de 3x3 */
 .sudoku-grid input:nth-child(9n+3), 
-.sudoku-grid input:nth-child(9n+6) {
-    border-right: 2px solid black;
-}
+.sudoku-grid input:nth-child(9n+6) { border-right: 2px solid black; }
 
 .sudoku-grid input:nth-child(n+19):nth-child(-n+27), 
-.sudoku-grid input:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 2px solid black;
-}
+.sudoku-grid input:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid black;}
 
-.sudoku-grid input:nth-child(9n+1) {
-    border-left: 2px solid black;
-}
+.sudoku-grid input:nth-child(9n+1) { border-left: 2px solid black; }
 
-.sudoku-grid input:nth-child(-n+9) {
-    border-top: 2px solid black;
-}
+.sudoku-grid input:nth-child(-n+9) { border-top: 2px solid black; }
 
-
-.header {
-    background-color: None;
-    border-radius: 20px;
-    padding: 10px;
-    margin: 20px;
-    margin-bottom: 40px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 4px 8px white; /* rgba(67, 170, 224, 1) */
-}
-
-/* Conteneur du header */
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
 
 /* Styles pour la navigation */
 nav ul {
@@ -89,9 +81,7 @@ nav ul {
     gap: 15px;
 }
 
-nav ul li {
-    display: inline;
-}
+nav ul li { display: inline; }
 
 nav ul li a {
     color: white;
@@ -101,11 +91,10 @@ nav ul li a {
     transition: background-color 0.1s;
 }
 
-nav ul li a:hover {
-    background-color: rgb(32, 74, 108);
-}
+nav ul li a:hover { background-color: rgb(32, 74, 108); }
 
 
+/* Styles des boutons */
 button{
     height: 35px;
     width: 80px;	
@@ -116,14 +105,13 @@ button{
     font-family: 'Oswald';
 }
 
-button:hover{
-		background-color: #204a6c;
-}
+button:hover{ background-color: #204a6c; }
 
 .play_button{
     margin-left:20px;
     margin-right:20px;
-
 }
+
+.hint_button:hover{ color: rgba(255, 229, 95, 1); }
 
 
