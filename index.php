@@ -106,7 +106,7 @@
         }
         insert_bdd_grid($pdo, $grid_to_bdd);
 
-        header('Location: sudoku.php');
+        header('Location: index.php');
         exit;
     }
 
@@ -121,7 +121,7 @@
 
         update_session_validation_bdd($pdo, 2);
 
-        header('Location: sudoku.php');
+        header('Location: index.php');
         exit;
     }
 
@@ -157,7 +157,7 @@
             update_session_validation_bdd($pdo, 0);
         }
         
-        header('Location: sudoku.php');
+        header('Location: index.php');
         exit;
     }
 
