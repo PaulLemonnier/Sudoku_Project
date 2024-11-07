@@ -281,13 +281,12 @@ function next_move_resolution($grid) {
 }
 
 
-
-
 // Vérifie si la résolutin est logique
 function is_logical_resolvable($grid) {
     $grid_play = human_logical_resolution($grid);
     return is_all_cell_complete($grid_play);
 }
+
 
 // Compte le nombre de solution d'une grille
 function count_solve_grid(&$grid) {

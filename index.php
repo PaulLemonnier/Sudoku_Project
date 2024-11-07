@@ -80,10 +80,10 @@
             <?php
             //permet de savoir si la grille a été validé
             $session = recover_bdd_session($pdo);
-            if ($session==0){echo "<span style='font-weight:bold;color:#f42e35'>Essaye encore !</span>";}
-            elseif ($session==1){echo "<span style='color:#34c434'>Bravo ! +1</span>";}
-            elseif ($session==6){echo "<span style='color:#f42e9d'>Tricheur !</span>";}
-            elseif ($session==9){echo "<span style='color:#ffa51d'>Erreur dans la grille</span>";}
+            if ($session=='ERROR_VALID_GRID'){echo "<span style='font-weight:bold;color:#f42e35'>Try again</span>";}
+            elseif ($session=='BRAVO'){echo "<span style='color:#34c434'>Bravo ! +1</span>";}
+            elseif ($session=='CHEAT'){echo "<span style='color:#f42e9d'>Cheater !</span>";}
+            elseif ($session=='ERROR_SAVE_GRID'){echo "<span style='color:#ffa51d'>Error in the grid</span>";}
             
             ?>
             </span>
@@ -98,7 +98,7 @@
 
         generate_bdd_grid($pdo, $new_grid);
 
-        update_session_validation_bdd($pdo, 2);
+        update_session_validation_bdd($pdo, "'START_GRID'");
 
         header('Location: index.php');
         exit;
@@ -119,17 +119,30 @@
             array_push($grid_to_bdd,$line_to_bdd);
         }
 
+        insert_bdd_grid($pdo, $grid_to_bdd);
+
+
+        // Vérification de la grille 
         $resultat = recover_bdd_grids($pdo); //récupère les grilles
         $init_grid = array_values($resultat['init_grid']); //récupère la grille initiale
         solve_grid($init_grid); //transforme la grille initial en grille solution
         $session = recover_bdd_session($pdo);
 
-        //si la grille résultat est égale à notre grille et qu'elle n'a pas déjà été validé
-        if !(compare_grid($init_grid, $grid_to_bdd)) { 
-            update_session_validation_bdd($pdo, 9); // dans le cas où l'utilisateur save quelque chose de faux
-        }
+        update_session_validation_bdd($pdo, "'GOOD_GRID'"); //on suppose que la grille sera bonne
 
-        insert_bdd_grid($pdo, $grid_to_bdd);
+        // si la grille du joueur est solutionnable la résout et vérifie si c'est la même que la grille initiale
+        if (is_logical_resolvable($grid_to_bdd)){
+            solve_grid($grid_to_bdd);
+
+            //si la grille résultat est égale à notre grille et qu'elle n'a pas déjà été validé
+            if (!(compare_grid($init_grid, $grid_to_bdd))) { 
+                update_session_validation_bdd($pdo, "'ERROR_SAVE_GRID'"); // dans le cas où l'utilisateur save quelque chose de faux
+            }
+        }else{
+            update_session_validation_bdd($pdo, "'ERROR_SAVE_GRID'"); // dans le cas où l'utilisateur à inséré une erreur
+        }
+        // Fin de vérification de la grille
+
 
         header('Location: index.php');
         exit;
@@ -160,13 +173,13 @@
         
         
         //si la grille résultat est égale à notre grille et qu'elle n'a pas déjà été validé
-        if (compare_grid($init_grid, $actual_grid) && $session!=1) { 
-            update_session_validation_bdd($pdo, 1); //met à jour la session dans la BDD
+        if (compare_grid($init_grid, $actual_grid) && $session!='BRAVO') { 
+            update_session_validation_bdd($pdo, "'BRAVO'"); //met à jour la session dans la BDD
             update_bdd_point($pdo); //met à jour les points dans la BDD
-        } elseif($session==1) {
-            update_session_validation_bdd($pdo, 6); // dans le cas où l'utilisateur revalide après avoir déjà valider sa grille
+        } elseif($session=='BRAVO') {
+            update_session_validation_bdd($pdo, "'CHEAT'"); // dans le cas où l'utilisateur revalide après avoir déjà valider sa grille
         }else {
-            update_session_validation_bdd($pdo, 0);
+            update_session_validation_bdd($pdo, "'ERROR_VALID_GRID'");
         }
         
         header('Location: index.php');

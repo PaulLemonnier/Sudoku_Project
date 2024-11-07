@@ -105,7 +105,7 @@ function update_bdd_point($pdo){
 
 //---------- Met à jour la session dans la base de données score -------------------
 function update_session_validation_bdd($pdo, $value){
-    $sql_update = "UPDATE score SET session=$value WHERE session = (SELECT session FROM score LIMIT 1)";
+    $sql_update = "UPDATE score SET session=$value WHERE point = (SELECT point FROM score LIMIT 1)";
     $stmt = $pdo->prepare($sql_update);
     $stmt->execute();
 }
