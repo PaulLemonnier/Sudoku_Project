@@ -47,7 +47,7 @@ rows = cursor.fetchall()
 
 # print(len(rows))
 print(rows)
-print(rows[0][1])
+# print(rows[0][1])
 
 conn.commit()
 
