@@ -7,7 +7,7 @@ cursor = conn.cursor()
 
 # Suppression de la table
 # cursor.execute("""DROP TABLE sudoku_grid""")
-cursor.execute("""DROP TABLE score""")
+# cursor.execute("""DROP TABLE score""")
 
 # Création de la table
 # cursor.execute("""CREATE TABLE IF NOT EXISTS sudoku_grid(
@@ -24,7 +24,7 @@ cursor.execute("""DROP TABLE score""")
 #             )
 # """)
 
-cursor.execute("""CREATE TABLE IF NOT EXISTS score(point INTEGER, session INTEGER)""")
+# cursor.execute("""CREATE TABLE IF NOT EXISTS score(point INTEGER, session INTEGER)""")
 
 # line_data = json.dumps([0,0,0,0,0,0,0,0,0]) 
 # print(line_data)
@@ -33,7 +33,7 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS score(point INTEGER, session INTEGE
 # cursor.execute("""INSERT INTO sudoku_grid (line1,line2,line3,line4,line5,line6,line7,line8,line9) VALUES(?,?,?,?,?,?,?,?,?)""",
 #                (line_data,line_data,line_data,line_data,line_data,line_data,line_data,line_data,line_data))
 
-cursor.execute("""INSERT INTO score (point, session) VALUES(8,2)""")
+# cursor.execute("""INSERT INTO score (point, session) VALUES(8,2)""")
 
 # Extraction de la donnée
 cursor.execute("""SELECT * FROM score LIMIT 10;""")

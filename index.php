@@ -82,13 +82,27 @@
             $session = recover_bdd_session($pdo);
             if ($session==0){echo "<span style='font-weight:bold;color:#f42e35'>Essaye encore !</span>";}
             elseif ($session==1){echo "<span style='color:#34c434'>Bravo ! +1</span>";}
-            elseif ($session==6){echo "<span style='color:#ffa51d'>Tricheur !</span>";}
+            elseif ($session==6){echo "<span style='color:#f42e9d'>Tricheur !</span>";}
+            elseif ($session==9){echo "<span style='color:#ffa51d'>Erreur dans la grille</span>";}
             
             ?>
             </span>
 
 
     <?php
+
+    // Si le bouton Generate est pressé génère une grille et l'insère dans la BDD
+    if (isset($_POST['submit_generate'])) {
+        
+        $new_grid = choose_sudoku_difficulty("Normal");
+
+        generate_bdd_grid($pdo, $new_grid);
+
+        update_session_validation_bdd($pdo, 2);
+
+        header('Location: index.php');
+        exit;
+    }
 
     // Si le bouton Save est pressé ajoute la grille actuelle dans la BDD
     if (isset($_POST['submit_save'])) {
@@ -104,6 +118,17 @@
             }
             array_push($grid_to_bdd,$line_to_bdd);
         }
+
+        $resultat = recover_bdd_grids($pdo); //récupère les grilles
+        $init_grid = array_values($resultat['init_grid']); //récupère la grille initiale
+        solve_grid($init_grid); //transforme la grille initial en grille solution
+        $session = recover_bdd_session($pdo);
+
+        //si la grille résultat est égale à notre grille et qu'elle n'a pas déjà été validé
+        if !(compare_grid($init_grid, $grid_to_bdd)) { 
+            update_session_validation_bdd($pdo, 9); // dans le cas où l'utilisateur save quelque chose de faux
+        }
+
         insert_bdd_grid($pdo, $grid_to_bdd);
 
         header('Location: index.php');
@@ -112,23 +137,9 @@
 
 
 
-    // Si le bouton Generate est pressé génère une grille et l'insère dans la BDD
-    if (isset($_POST['submit_generate'])) {
-        
-        $new_grid = choose_sudoku_difficulty("Normal");
-
-        generate_bdd_grid($pdo, $new_grid);
-
-        update_session_validation_bdd($pdo, 2);
-
-        header('Location: index.php');
-        exit;
-    }
-
-
     // Si le bouton Validate est pressé génère vérifie la solution et ajoute les points
     if (isset($_POST['submit_validate'])) {
-
+        
         // Récupération de la grille actuelle
         $actual_grid = array();
         for ($row = 1; $row <= 9; $row++) {
@@ -146,7 +157,8 @@
         $init_grid = array_values($resultat['init_grid']); //récupère la grille initiale
         solve_grid($init_grid); //transforme la grille initial en grille solution
         $session = recover_bdd_session($pdo);
-
+        
+        
         //si la grille résultat est égale à notre grille et qu'elle n'a pas déjà été validé
         if (compare_grid($init_grid, $actual_grid) && $session!=1) { 
             update_session_validation_bdd($pdo, 1); //met à jour la session dans la BDD
@@ -193,6 +205,7 @@
 </br>
 </br>
 </br>
+
 </body>
 
 </form>
