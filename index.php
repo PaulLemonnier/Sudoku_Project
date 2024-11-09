@@ -128,7 +128,14 @@
         solve_grid($init_grid); //transforme la grille initial en grille solution
         $session = recover_bdd_session($pdo);
 
-        update_session_validation_bdd($pdo, "'GOOD_GRID'"); //on suppose que la grille sera bonne
+        // Gère le cas où l'utilisateur essaye de save la grille pour remettre la session à 0
+        if($session=='CHEAT') {
+            update_session_validation_bdd($pdo, "'CHEAT'");
+        }elseif($session=='BRAVO'){
+            update_session_validation_bdd($pdo, "'BRAVO'");
+        }else{
+            update_session_validation_bdd($pdo, "'GOOD_GRID'");
+        }
 
         // si la grille du joueur est solutionnable la résout et vérifie si c'est la même que la grille initiale
         if (is_logical_resolvable($grid_to_bdd)){
@@ -173,10 +180,10 @@
         
         
         //si la grille résultat est égale à notre grille et qu'elle n'a pas déjà été validé
-        if (compare_grid($init_grid, $actual_grid) && $session!='BRAVO') { 
+        if (compare_grid($init_grid, $actual_grid) && $session!=='BRAVO' && $session!=='CHEAT') { 
             update_session_validation_bdd($pdo, "'BRAVO'"); //met à jour la session dans la BDD
             update_bdd_point($pdo); //met à jour les points dans la BDD
-        } elseif($session=='BRAVO') {
+        } elseif($session=='BRAVO' || $session=='CHEAT') { // Si l'utilisateur à déjà récupéré les points
             update_session_validation_bdd($pdo, "'CHEAT'"); // dans le cas où l'utilisateur revalide après avoir déjà valider sa grille
         }else {
             update_session_validation_bdd($pdo, "'ERROR_VALID_GRID'");
